@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button id="addTaskButton">+</button>
+        </div>
+        <div id="taskForm" class="task-form hidden">
+            <input type="hidden" id="taskId">
+            <input type="text" id="taskTitle" placeholder="Task Title">
+            <input type="text" id="taskDescription" placeholder="Task Description">
+            <input type="date" id="taskDueDate">
+            <button id="saveTaskButton">Save</button>
+        </div>
+        <div id="tasksContainer" class="tasks-container">
+            <!-- Tasks will be dynamically inserted here -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

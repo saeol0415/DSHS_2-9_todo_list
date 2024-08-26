@@ -1,0 +1,93 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 20px;
+}
+
+#addTaskButton {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.task-form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#saveTaskButton {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.tasks-container .task {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.tasks-container .task h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.tasks-container .task p {
+    margin: 0 0 10px 0;
+}
+
+.tasks-container .task small {
+    color: gray;
+}
+
+.tasks-container .task .actions {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.tasks-container .task .actions button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    margin-left: 10px;
+}
