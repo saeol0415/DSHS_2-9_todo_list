@@ -1,0 +1,20 @@
+name: Update JSON
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Update JSON file
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" > .token
+          curl -X PUT -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"message": "Update JSON", "content": "$(base64 -w 0 path/to/tasks.json)"}' \
+          https://api.github.com/repos/username/repository-name/contents/path/to/tasks.json
