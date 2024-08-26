@@ -20,13 +20,17 @@ body {
 
 #addTaskButton {
     font-size: 24px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 40px;  /* Fixed width */
+    height: 40px; /* Fixed height */
+    border-radius: 50%; /* Circular shape */
     border: none;
     background-color: #007bff;
     color: white;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box; /* Include padding and border in width/height */
 }
 
 .task-form {
