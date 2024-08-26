@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     saveTaskButton.addEventListener('click', () => {
-        const id = taskIdField.value || '';
+        const id = taskIdField.value || Date.now().toString();
         const title = document.getElementById('taskTitle').value;
         const description = document.getElementById('taskDescription').value;
         const dueDate = document.getElementById('taskDueDate').value;
@@ -24,51 +24,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 dueDate
             };
             saveTask(task);
+            renderTasks();
+            taskForm.classList.add('hidden');
         } else {
             alert('Title and Due Date are required!');
         }
     });
 
     function saveTask(task) {
-        const method = task.id ? 'PUT' : 'POST';
-        fetch(`http://localhost:3000/tasks${task.id ? '/' + task.id : ''}`, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(task)
-        })
-        .then(response => response.json())
-        .then(data => {
-            renderTasks();
-            taskForm.classList.add('hidden');
-        })
-        .catch(error => console.error('Error:', error));
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const existingTaskIndex = tasks.findIndex(t => t.id === task.id);
+
+        if (existingTaskIndex > -1) {
+            tasks[existingTaskIndex] = task;
+        } else {
+            tasks.push(task);
+        }
+
+        localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
     function deleteTask(taskId) {
-        fetch(`http://localhost:3000/tasks/${taskId}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-            renderTasks();
-        })
-        .catch(error => console.error('Error:', error));
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks = tasks.filter(task => task.id !== taskId);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        renderTasks();
     }
 
     function editTask(taskId) {
-        fetch(`http://localhost:3000/tasks/${taskId}`)
-        .then(response => response.json())
-        .then(task => {
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const task = tasks.find(task => task.id === taskId);
+
+        if (task) {
             taskIdField.value = task.id;
             document.getElementById('taskTitle').value = task.title;
             document.getElementById('taskDescription').value = task.description;
             document.getElementById('taskDueDate').value = task.dueDate;
 
             taskForm.classList.remove('hidden');
-        })
-        .catch(error => console.error('Error:', error));
+        }
     }
 
     function clearForm() {
@@ -80,29 +74,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function renderTasks() {
         tasksContainer.innerHTML = '';
-        fetch('http://localhost:3000/tasks')
-        .then(response => response.json())
-        .then(tasks => {
-            tasks.forEach(task => {
-                const taskElement = document.createElement('div');
-                taskElement.classList.add('task');
-                taskElement.innerHTML = `
-                    <h3>${task.title}</h3>
-                    <p>${task.description}</p>
-                    <small>Due: ${task.dueDate}</small>
-                    <div class="actions">
-                        <button onclick="editTask('${task.id}')">Edit</button>
-                        <button onclick="deleteTask('${task.id}')">Delete</button>
-                    </div>
-                `;
-                tasksContainer.appendChild(taskElement);
-            });
-        })
-        .catch(error => console.error('Error:', error));
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.forEach(task => {
+            const taskElement = document.createElement('div');
+            taskElement.classList.add('task');
+            taskElement.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.description}</p>
+                <small>Due: ${task.dueDate}</small>
+                <div class="actions">
+                    <button onclick="editTask('${task.id}')">Edit</button>
+                    <button onclick="deleteTask('${task.id}')">Delete</button>
+                </div>
+            `;
+            tasksContainer.appendChild(taskElement);
+        });
     }
 
     renderTasks();
 
-    window.editTask = editTask;
-    window.deleteTask = deleteTask;
+    window.editTask = editTask;  // Expose editTask to global scope
+    window.deleteTask = deleteTask;  // Expose deleteTask to global scope
 });
